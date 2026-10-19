@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AiriPay</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="min-h-screen">
+  <main class="mx-auto max-w-5xl px-6 py-14">
+
+    <header class="flex items-end justify-between pb-10 hairline-b">
+      <div>
+        <h1 class="text-2xl font-medium tracking-tight">AiriPay</h1>
+        <p class="mt-1 text-sm muted">Offline invoice verification</p>
+      </div>
+      <div class="flex items-center gap-2 text-xs muted" title="No network required">
+        <span class="pulse-dot"></span>
+        <span>Offline sandbox</span>
+      </div>
+    </header>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <div class="grid gap-px md:grid-cols-2 panel-grid">
+
+      <section class="panel">
+        <h2 class="panel-title">Issue</h2>
+        <form id="issue-form" class="mt-6 space-y-5" autocomplete="off">
+          <label class="field">
+            <span>Merchant ID</span>
+            <input id="merchant-id" name="merchant_id" type="text" placeholder="LAGOS-MART-01" required>
+          </label>
+          <label class="field">
+            <span>Amount (NGN)</span>
+            <input id="amount" name="amount" type="number" step="0.01" min="0.01" placeholder="12500.00" required>
+          </label>
+          <button type="submit" class="btn">Generate token</button>
+        </form>
+
+        <div id="issue-result" class="mt-8 hidden">
+          <div class="qr-frame">
+            <img id="qr-image" alt="Invoice QR code">
+          </div>
+          <dl class="mt-6 space-y-3 text-sm">
+            <div>
+              <dt class="label">Issued</dt>
+              <dd id="issued-at" class="mono"></dd>
+            </div>
+            <div>
+              <dt class="label">Signature</dt>
+              <dd id="signature" class="mono"></dd>
+            </div>
+            <div>
+              <dt class="label">Token</dt>
+              <dd id="token" class="mono token-box"></dd>
+            </div>
+          </dl>
+          <button id="copy-token" type="button" class="btn btn-quiet mt-5">Copy token</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="panel-title">Verify</h2>
+        <form id="verify-form" class="mt-6 space-y-5" autocomplete="off">
+          <label class="field">
+            <span>Token</span>
+            <textarea id="verify-token" name="token" rows="6" placeholder="Paste invoice token" required></textarea>
+          </label>
+          <button type="submit" class="btn">Verify</button>
+        </form>
+
+        <div id="verify-result" class="verdict hidden">
+          <p id="verdict-label" class="verdict-label"></p>
+          <dl id="verdict-details" class="mt-4 space-y-3 text-sm"></dl>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="mt-10 text-xs muted">
+      HMAC-MD5, 8-character tag. Verification runs against the local server only.
+    </footer>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
